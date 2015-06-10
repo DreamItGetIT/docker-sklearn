@@ -1,8 +1,6 @@
 FROM ubuntu:latest
 
 ADD openblas.conf /etc/ld.so.conf.d/openblas.conf
-ADD numpy-site.cfg /opt/numpy-site.cfg
-ADD scipy-site.cfg /opt/scipy-site.cfg
 
 RUN apt-get update
 RUN apt-get install -y git-core build-essential gfortran python-dev curl python-pip
@@ -15,13 +13,13 @@ RUN git clone -q --branch=master https://github.com/xianyi/OpenBLAS.git && \
 
 RUN ldconfig
 
-RUN git clone -q --branch=v1.9.2 https://github.com/numpy/numpy.git && \
-  mv /opt/numpy-site.cfg numpy/site.cfg \
-  cd numpy && python setup.py install
+RUN git clone -q --branch=v1.9.2 https://github.com/numpy/numpy.git /tmp/numpy
+ADD numpy-site.cfg /tmp/numpy/site.cfg
+RUN cd /tmp/numpy && python setup.py install
 
-RUN git clone -q --branch=v0.15.1 https://github.com/scipy/scipy.git \
-  mv /opt/scipy-site.cfg scipy/site.cfg \
-  cd scipy && python setup.py install
+RUN git clone -q --branch=v0.15.1 https://github.com/scipy/scipy.git /tmp/scipy
+ADD scipy-site.cfg /tmp/scipy/site.cfg
+RUN cd /tmp/scipy && python setup.py install
 
 RUN pip install git+git://github.com/scikit-learn/scikit-learn.git
 

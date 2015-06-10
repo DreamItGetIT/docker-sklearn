@@ -21,7 +21,7 @@ RUN git clone -q --branch=v0.15.1 https://github.com/scipy/scipy.git /tmp/scipy
 ADD scipy-site.cfg /tmp/scipy/site.cfg
 RUN cd /tmp/scipy && python setup.py install
 
-RUN pip install git+git://github.com/scikit-learn/scikit-learn.git
+RUN pip install https://github.com/scikit-learn/scikit-learn.git
 
 RUN pip uninstall -y cython
 RUN apt-get remove -y --purge curl git-core build-essential python-dev
